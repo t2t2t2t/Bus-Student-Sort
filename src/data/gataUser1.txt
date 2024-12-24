@@ -1,5 +1,0 @@
-john_doe, password123, john.doe@example.com, true
-susan_smith, qwerty456, susan.smith@example.com, false
-alex_williams, alex789, alex.williams@example.com, true
-emma_jones, emmasecure, emma.jones@example.com, false
-michael_brown, mikey2022, michael.brown@example.com, true
