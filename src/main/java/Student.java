@@ -4,6 +4,16 @@ public class Student {
     private String recordBookNumber;
     private boolean sortable;
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "groupNumber='" + groupNumber + '\'' +
+                ", averageScore=" + averageScore +
+                ", recordBookNumber='" + recordBookNumber + '\'' +
+                ", sortable=" + sortable +
+                '}';
+    }
+
     private Student(StudentBuilder builder) {
         this.groupNumber = builder.groupNumber;
         this.averageScore = builder.averageScore;

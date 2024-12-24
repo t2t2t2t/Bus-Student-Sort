@@ -5,6 +5,16 @@ public class Bus {
     private int mileage;
     private boolean sortable;
 
+    @Override
+    public String toString() {
+        return "Bus{" +
+                "number='" + number + '\'' +
+                ", model='" + model + '\'' +
+                ", mileage=" + mileage +
+                ", sortable=" + sortable +
+                '}';
+    }
+
     private Bus(BusBuilder builder) {
         this.number = builder.number;
         this.model = builder.model;

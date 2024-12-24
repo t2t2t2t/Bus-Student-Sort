@@ -4,6 +4,16 @@ public class User {
     private String email;
     private boolean sortable;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", sortable=" + sortable +
+                '}';
+    }
+
     private User(UserBuilder builder) {
         this.name = builder.name;
         this.password = builder.password;

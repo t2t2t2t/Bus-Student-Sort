@@ -1,0 +1,3 @@
+A123BC,Mercedes,50000,true
+B456DE,Volvo,30000,false
+C789FG,MAN,60000,true
