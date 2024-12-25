@@ -10,6 +10,9 @@ public class Student {
         this.recordBookNumber = builder.recordBookNumber;
         this.sortable = builder.sortable;
     }
+        public boolean isSortable() {
+        return sortable;
+    }
 
     public static class StudentBuilder {
         private String groupNumber;
