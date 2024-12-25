@@ -10,6 +10,10 @@ public class Bus {
         this.mileage = builder.mileage;
         this.sortable = builder.sortable;
     }
+    
+    public boolean isSortable() {
+        return sortable;
+    }
 
     public static class BusBuilder {
         private String number;
