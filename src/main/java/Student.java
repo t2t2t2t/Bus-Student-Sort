@@ -1,4 +1,4 @@
-public class Student {
+public class Student implements Sortable{
     private String groupNumber;
     private double averageScore;
     private int recordBookNumber;
@@ -16,7 +16,10 @@ public class Student {
 
     public Student() {
     }
+    public boolean isSortable() {
 
+        return sortable;
+    }
     private Student(StudentBuilder builder) {
         this.groupNumber = builder.groupNumber;
         this.averageScore = builder.averageScore;
