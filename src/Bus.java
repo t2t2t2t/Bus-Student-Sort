@@ -45,6 +45,9 @@ public class Bus {
             return new Bus(this);
         }
     }
-
+    @Override
+    public String toString() {
+        return "Модель: " + model + ", Номер:" + number + "Пробег: " + mileage;
+    }
 
 }
