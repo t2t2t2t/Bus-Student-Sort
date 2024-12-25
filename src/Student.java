@@ -45,5 +45,8 @@ public class Student {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "Номер зачетной книжки: "+ recordBookNumber+", Номер группы: " + groupNumber + ", Средний балл:" + averageScore;
+    }
 }
