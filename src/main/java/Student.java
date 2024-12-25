@@ -1,7 +1,7 @@
 public class Student implements Sortable{
     private String groupNumber;
     private double averageScore;
-    private int recordBookNumber;
+    private String recordBookNumber;
     private boolean sortable;
 
     @Override
@@ -30,7 +30,7 @@ public class Student implements Sortable{
     public static class StudentBuilder {
         private String groupNumber;
         private double averageScore;
-        private int recordBookNumber;
+        private String recordBookNumber;
         private boolean sortable;
 
         public StudentBuilder setGroupNumber(String groupNumber) {
@@ -43,7 +43,7 @@ public class Student implements Sortable{
             return this;
         }
 
-        public StudentBuilder setRecordBookNumber(int recordBookNumber) {
+        public StudentBuilder setRecordBookNumber(String recordBookNumber) {
             this.recordBookNumber = recordBookNumber;
             return this;
         }

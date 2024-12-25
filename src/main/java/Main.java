@@ -69,6 +69,14 @@ public class Main {
     public static void actionMenu(Object[] entities) {
         Object[] sortClass;
         Object findObject;
+        WriteInFile writer = new WriteInFile();
+        //пример записи
+        List<Sortable> sortableList = Arrays.stream(entities)
+                .filter(e -> e instanceof Sortable)
+                .map(e -> (Sortable) e)
+                .toList();
+
+        writer.logSortedCollection(sortableList);
 
         while (true) {
             System.out.println(MenuConstants.ACTION_MENU);
@@ -81,12 +89,12 @@ public class Main {
                     break;
                 case 3:
                     System.out.println("Запись в файл с сортировка");
-
+                    writer.logSortedCollection(sortableList);
                     System.out.println("Отсортированные данные записаны.");
                     break;
                 case 4:
                     System.out.println("Запись в файл с бинарным поиском");
-
+                    writer.logFoundValue(entities[0]);
                     System.out.println("Отсортированные данные записаны.");
                     break;
                 case 5:
