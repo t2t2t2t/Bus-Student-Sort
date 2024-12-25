@@ -1,6 +1,10 @@
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -50,7 +54,9 @@ public class Main {
                     break;
 
                 case 3:
-                    //...
+                    System.out.println("Ввод файла рандомно");
+                    entities=RandomEntityGenerator.fillEntitiesRandomly(entityClass, getChoice(0, 2000));
+                    actionMenu(entities);
                     break;
 
                 case 0:
@@ -63,9 +69,10 @@ public class Main {
     public static void actionMenu(Object[] entities) {
         Object[] sortClass;
         Object findObject;
+
         while (true) {
             System.out.println(MenuConstants.ACTION_MENU);
-            switch (getChoice(0, 4)) {
+            switch (getChoice(0, 5)) {
                 case 1:
                     System.out.println("Сортировка");
                     break;
@@ -73,9 +80,16 @@ public class Main {
                     System.out.println("Бинарный поиск");
                     break;
                 case 3:
-                    System.out.println("Запись в файл");
+                    System.out.println("Запись в файл с сортировка");
+
+                    System.out.println("Отсортированные данные записаны.");
                     break;
                 case 4:
+                    System.out.println("Запись в файл с бинарным поиском");
+
+                    System.out.println("Отсортированные данные записаны.");
+                    break;
+                case 5:
                     System.out.println("Вывод данных");
                     for (Object e: entities) {
                         System.out.println(e.toString());
@@ -89,6 +103,7 @@ public class Main {
 
     public static int getChoice(int min, int max) {
         while (true) {
+            System.out.println("Введите значение");
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
                 if (choice >= min && choice <= max) {
@@ -114,15 +129,16 @@ public class Main {
                 "Выберите способ заполнения массива:\n" +
                         "1. Ввод вручную\n" +
                         "2. Ввод из файла\n" +
-                        "3. Рандомная генерация"+
+                        "3. Рандомная генерация\n"+
                         "0. Выход из данного меню";
 
         public static final String ACTION_MENU =
                 "Выберите действие:\n" +
                         "1. Сортировка\n" +
                         "2. Поиск\n" +
-                        "3. Запись в файл\n"+
-                        "4. Вывод данных\n"+
+                        "3. Запись в файл отсортированные данные\n"+
+                        "4. Запись в файл найденного объекта\n"+
+                        "5. Вывод данных\n"+
                         "0. Выход из данного меню";
         public static final String EXIT_MESSAGE = "\nСпасибо за использование программы! До свидания!";
 

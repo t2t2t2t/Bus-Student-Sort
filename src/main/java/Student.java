@@ -1,7 +1,7 @@
 public class Student {
     private String groupNumber;
     private double averageScore;
-    private String recordBookNumber;
+    private int recordBookNumber;
     private boolean sortable;
 
     @Override
@@ -27,7 +27,7 @@ public class Student {
     public static class StudentBuilder {
         private String groupNumber;
         private double averageScore;
-        private String recordBookNumber;
+        private int recordBookNumber;
         private boolean sortable;
 
         public StudentBuilder setGroupNumber(String groupNumber) {
@@ -40,7 +40,7 @@ public class Student {
             return this;
         }
 
-        public StudentBuilder setRecordBookNumber(String recordBookNumber) {
+        public StudentBuilder setRecordBookNumber(int recordBookNumber) {
             this.recordBookNumber = recordBookNumber;
             return this;
         }

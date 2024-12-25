@@ -19,18 +19,30 @@ public class EntityFiller {
 
             try {
                 String value = (data != null && i < data.length) ? data[i] : getInput(field);
-                if (field.getType() == String.class) {
-                    field.set(entity, value);
-                } else if (field.getType() == int.class) {
-                    field.set(entity, Integer.parseInt(value));
-                } else if (field.getType() == boolean.class) {
-                    field.set(entity, Boolean.parseBoolean(value));
-                } else if (field.getType() == double.class) {
-                    field.set(entity, Double.parseDouble(value));
+                switch (field.getType().getName()) {
+                    case "java.lang.String":
+                        field.set(entity, value);
+                        break;
+
+                    case "int":
+                        field.set(entity, Integer.parseInt(value));
+                        break;
+
+                    case "boolean":
+                        field.set(entity, Boolean.parseBoolean(value));
+                        break;
+
+                    case "double":
+                        field.set(entity, Double.parseDouble(value));
+                        break;
+
+                    default:
+                        throw new IllegalArgumentException("Unsupported field type: " + field.getType().getName());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
     }
 
