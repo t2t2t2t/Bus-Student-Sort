@@ -10,7 +10,9 @@ public class User {
         this.email = builder.email;
         this.sortable = builder.sortable;
     }
-
+    public boolean isSortable() {
+        return sortable;
+    }
     public static class UserBuilder {
         private String name;
         private String password;
