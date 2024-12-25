@@ -1,4 +1,4 @@
-public class Bus {
+public class Bus implements Sortable {
 
     private String number;
     private String model;
@@ -17,7 +17,10 @@ public class Bus {
 
     public Bus() {
     }
+    public boolean isSortable() {
 
+        return sortable;
+    }
     private Bus(BusBuilder builder) {
         this.number = builder.number;
         this.model = builder.model;
