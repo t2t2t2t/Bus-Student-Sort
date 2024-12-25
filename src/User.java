@@ -44,5 +44,9 @@ public class User {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Имя: "+ name+", Пароль: " + password + ", Почта:" + email;
+    }
 
 }
