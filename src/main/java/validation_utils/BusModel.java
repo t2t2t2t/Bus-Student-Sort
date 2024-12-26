@@ -1,4 +1,4 @@
-package ValidationUtils;
+package validation_utils;
 
 public enum BusModel {
     ANKAI("ANKAI"),

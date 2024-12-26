@@ -1,4 +1,4 @@
-package ValidationUtils;
+package validation_utils;
 
 import java.util.regex.Pattern;
 
@@ -8,6 +8,18 @@ public class ValidationUtils {
         @Override
         public boolean isValid(Integer number) {
             return number != null && number > 0;
+        }
+    }
+    public static class BooleanValidator implements Validate<Boolean> {
+        @Override
+        public boolean isValid(Boolean isSomething) {
+            return isSomething != null;
+        }
+    }
+    public static class StringValidator implements Validate<String> {
+        @Override
+        public boolean isValid(String str) {
+            return !(str).isEmpty();
         }
     }
 

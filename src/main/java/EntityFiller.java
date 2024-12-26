@@ -1,16 +1,17 @@
+import validation_utils.Validate;
+import validation_utils.ValidationUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class EntityFiller {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static void fillEntityFields(Object entity, String[] data) {
+    public static void fillEntityFields(Object entity, String[] data, boolean isFromFile) {
         Field[] fields = entity.getClass().getDeclaredFields();
 
         for (int i = 0; i < fields.length; i++) {
@@ -19,31 +20,87 @@ public class EntityFiller {
 
             try {
                 String value = (data != null && i < data.length) ? data[i] : getInput(field);
-                switch (field.getType().getName()) {
-                    case "java.lang.String":
-                        field.set(entity, value);
-                        break;
 
-                    case "int":
-                        field.set(entity, Integer.parseInt(value));
-                        break;
 
-                    case "boolean":
-                        field.set(entity, Boolean.parseBoolean(value));
-                        break;
+                // Сначала пытаемся применить валидатор на основе имени поля
+                Validate<?> validator = switch (field.getName().toLowerCase()) {
+                    case "email" -> new ValidationUtils.UserEmailValidator();
+                    case "model" -> new ValidationUtils.BusModelValidator();
+                    case "password" -> new ValidationUtils.UserPasswordValidator();
+                    case "averagegrade" -> new ValidationUtils.AverageGradeValidator();
+                    default -> null;
+                };
 
-                    case "double":
-                        field.set(entity, Double.parseDouble(value));
-                        break;
-
-                    default:
-                        throw new IllegalArgumentException("Unsupported field type: " + field.getType().getName());
+                // Если валидатор по имени поля не был выбран, применяем валидатор на основе типа данных
+                if (validator == null) {
+                    System.out.println(field.getType().getName());
+                    System.out.println(field.getType());
+                    String fieldType = field.getType().getName();
+                    switch (fieldType) {
+                        case "java.lang.String":
+                            validator = new ValidationUtils.StringValidator();
+                            break;
+                        case "int":
+                        case "java.lang.Integer":
+                            validator = new ValidationUtils.NumberValidator();
+                            break;
+                        case "boolean":
+                        case "java.lang.Boolean":
+                            validator = new ValidationUtils.BooleanValidator();
+                            break;
+                    }
                 }
+
+                Object parsedValue = parseValue(field.getType(), value);
+
+                while (validator != null && !((Validate<Object>) validator).isValid(parsedValue)) {
+                    if (isFromFile) {
+                        System.out.println("Валидация не прошла: " + field.getName() + ". Пропуск...");
+                        parsedValue = null;
+                        break;
+                    } else {
+                        System.out.println("Неправильное значение " + field.getName() + ". Попробуйте снова:");
+                        value = getInput(field);
+                        parsedValue = parseValue(field.getType(), value);
+                    }
+                }
+
+                if (parsedValue != null) {
+                    field.set(entity, parsedValue);
+                }
+
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
+    }
+    private static Object parseValue(Class<?> type, String value) {
+            switch (type.getName()) {
+                case "java.lang.String":
+                    return value;
+                case "int":
+                    try {
+                        return Integer.parseInt(value);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid integer value: " + value + ". Assigning default value (0).");
+                        return 0;
+                    }
+                case "double":
+                    try {
+                        return Double.parseDouble(value);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid double value: " + value + ". Assigning default value (0.0).");
+                        return 0.0;
+                    }
+                case "boolean":
+                    return Boolean.parseBoolean(value);
+                default:
+                    throw new IllegalArgumentException("Unsupported field type: " + type.getName());
+            }
+
     }
 
 
@@ -87,7 +144,7 @@ public class EntityFiller {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 Object entity = entityClass.getDeclaredConstructor().newInstance();
-                EntityFiller.fillEntityFields(entity, data);
+                EntityFiller.fillEntityFields(entity, data,true);
                 entities.add(entity);
             }
         } catch (Exception e) {
@@ -103,7 +160,7 @@ public class EntityFiller {
                 try {
                     Object entity = entityClass.getDeclaredConstructor().newInstance();
                     System.out.println("Введите данные для объекта типа: " + entityClass.getSimpleName() + " №" + (i + 1));
-                    EntityFiller.fillEntityFields(entity, null);
+                    EntityFiller.fillEntityFields(entity, null,false);
                     entities[i] = entity;
                 } catch (Exception e) {
                     e.printStackTrace();
