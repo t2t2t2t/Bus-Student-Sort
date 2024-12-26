@@ -1,3 +1,5 @@
+package classes;
+
 public class Student {
     private String groupNumber;
     private double averageScore;
@@ -9,6 +11,27 @@ public class Student {
         this.averageScore = builder.averageScore;
         this.recordBookNumber = builder.recordBookNumber;
         this.sortable = builder.sortable;
+    }
+
+    public String getGroupNumber() {
+        return groupNumber;
+    }
+
+    public double getAverageScore() {
+        return averageScore;
+    }
+
+    public String getRecordBookNumber() {
+        return recordBookNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "groupNumber='" + groupNumber + '\'' +
+                ", averageScore=" + averageScore +
+                ", recordBookNumber='" + recordBookNumber + '\'' +
+                '}';
     }
 
     public static class StudentBuilder {

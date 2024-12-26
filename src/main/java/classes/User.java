@@ -1,3 +1,5 @@
+package classes;
+
 public class User {
     private String name;
     private String password;
@@ -9,6 +11,23 @@ public class User {
         this.password = builder.password;
         this.email = builder.email;
         this.sortable = builder.sortable;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String toString() {
+        return getName() + "/" + getEmail() + "/" + getPassword();
     }
 
     public static class UserBuilder {
