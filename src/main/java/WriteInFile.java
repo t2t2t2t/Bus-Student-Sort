@@ -17,16 +17,16 @@ class WriteInFile {
             }
             writer.write("\n\n");
         } catch (IOException e) {
-            System.err.println("Ошибка при записи в файл: " + e.getMessage());
+            System.err.println("Error writing to file: " + e.getMessage());
         }
     }
 
     public void logFoundValue(Object foundValue) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
-            writer.write("Найденный объект " + foundValue.toString());
+            writer.write("Found object" + foundValue.toString());
             writer.newLine();
         } catch (IOException e) {
-            System.err.println("Ошибка при записи в файл: " + e.getMessage());
+            System.err.println("Error writing to file: " + e.getMessage());
         }
     }
 
