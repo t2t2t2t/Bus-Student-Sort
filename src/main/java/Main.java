@@ -1,9 +1,8 @@
 import classes.Bus;
 import classes.Student;
 import classes.User;
-import utils.ClassUtil;
-import utils.ComparatorUtil;
-import utils.SorterUtil;
+import utils.*;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -100,7 +99,21 @@ public class Main {
                 case 2:
                     System.out.println("Binary Search");
 
+                    System.out.println("Write value to search");
+
+                    String value = scanner.nextLine();
+
+                    System.out.println("Binary Search");
+                    Class<?> searchingClass = list.get(0).getClass();
+                    Comparator<Object> comparator1 = (Comparator<Object>) SearchingCompareUtil.getComparatorForClass(searchingClass, 0);
+                    Object target = SearchingCompareUtil.CreateTargetObject(searchingClass, value);  // Создаем правильный объект
+
+                    int studentResult = SearchUtility.BinarySearch(list, target, comparator1);
+
+                    System.out.println(list.get(studentResult));
+
                     break;
+
                 case 3:
                     System.out.println("Writing to a file with sorting");
                     System.out.println("The sorted data is recorded.");
