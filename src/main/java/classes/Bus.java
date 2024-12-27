@@ -4,7 +4,7 @@ public class Bus {
     private String number;
     private String model;
     private int mileage;
-    private boolean sortable;
+
 
     public Bus() {
     }
@@ -13,7 +13,7 @@ public class Bus {
         this.number = builder.number;
         this.model = builder.model;
         this.mileage = builder.mileage;
-        this.sortable = builder.sortable;
+
     }
 
     public String getModel() {
@@ -56,10 +56,7 @@ public class Bus {
             return this;
         }
 
-        public BusBuilder setSortable(boolean sortable) {
-            this.sortable = sortable;
-            return this;
-        }
+
 
         public Bus build() {
             return new Bus(this);

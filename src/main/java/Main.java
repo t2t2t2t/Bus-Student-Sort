@@ -2,7 +2,6 @@ import classes.Bus;
 import classes.Student;
 import classes.User;
 import utils.*;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -16,7 +15,7 @@ public class Main {
 
         while (true) {
             System.out.println(MenuConstants.MAIN_MENU);
-            switch (getChoice(0, 3)) {
+            switch (getChoice(0, 3,"Enter value")) {
                 case 1:
                     inputMenu(Bus.class);
                     break;
@@ -37,10 +36,10 @@ public class Main {
         Object[] entities;
         while (true) {
             System.out.println(MenuConstants.INPUT_MENU);
-            switch (getChoice(0, 3)) {
+            switch (getChoice(0, 3,"Enter value")) {
                 case 1:
                     System.out.println("Manual input is selected.");
-                    entities = EntityFiller.fillEntitiesManually(entityClass, getChoice(0, 2000));
+                    entities = EntityFiller.fillEntitiesManually(entityClass, getChoice(0, 2000,"Enter the number of objects"));
                     actionMenu(entities);
                     break;
 
@@ -57,7 +56,7 @@ public class Main {
 
                 case 3:
                     System.out.println("Entering a file randomly");
-                    entities=RandomEntityGenerator.fillEntitiesRandomly(entityClass, getChoice(0, 2000));
+                    entities=RandomEntityGenerator.fillEntitiesRandomly(entityClass, getChoice(0, 2000,"Enter the number of objects"));
                     actionMenu(entities);
                     break;
 
@@ -73,14 +72,14 @@ public class Main {
         Object findObject = null;
         WriteInFile writer = new WriteInFile();
         List<Object> list = Arrays.asList(entities);
-
+        displayEntities(entities);
         while (true) {
+
             System.out.println(MenuConstants.ACTION_MENU);
-            int choice = getChoice(0, 5);
+            int choice = getChoice(0, 5,"Enter value");
             switch (choice) {
                 case 1:
                     sortList = sortEntities(list);
-                    System.out.println(sortList);
                     break;
                 case 2:
                     findObject = performBinarySearch(list);
@@ -114,20 +113,21 @@ public class Main {
             System.out.println(i + ": " + fields.get(i).getName());
         }
 
-        int fieldIndex = getChoice(0, fields.size() - 1);
+        int fieldIndex = getChoice(0, fields.size() - 1,"Enter the fields");
         var selectedField = fields.get(fieldIndex);
         System.out.println("Selected field: " + selectedField.getName());
 
-        comparator = ComparatorUtil.getComparator(ClassUtil.getClassFromList(list)).selectComparator(0);
+        comparator = ComparatorUtil.getComparator(ClassUtil.getClassFromList(list)).selectComparator(fieldIndex);
         SorterUtil.sort(list, comparator, "quick");
 
-        // Проверка изменения sortList
-        System.out.println("Sorting completed. Sorted list: " + list);
-        return list; // Возвращаем отсортированный список
+
+        displayEntities(list.toArray());
+        return list;
     }
 
     private static Object performBinarySearch(List<Object> list) {
         System.out.println("Binary Search");
+
         Class<?> clazz = list.get(0).getClass();
         var fields = Arrays.stream(clazz.getDeclaredFields()).toList();
 
@@ -135,7 +135,7 @@ public class Main {
             System.out.println(i + ": " + fields.get(i).getName());
         }
 
-        int fieldIndex = getChoice(0, fields.size() - 1);
+        int fieldIndex = getChoice(0, fields.size() - 1,"Enter the fields");
         var selectedField = fields.get(fieldIndex);
         System.out.println("Selected field: " + selectedField.getName());
 
@@ -143,6 +143,7 @@ public class Main {
         System.out.print("Enter search value: ");
         String str = scanner.nextLine();
         Object target = SearchingCompareUtil.CreateTargetObject(clazz, str, fieldIndex);
+
 
         int resultIndex = SearchUtility.BinarySearch(list, target, comparator);
         if (resultIndex >= 0) {
@@ -180,9 +181,9 @@ public class Main {
         }
     }
 
-    public static int getChoice(int min, int max) {
+    public static int getChoice(int min, int max,String mess) {
         while (true) {
-            System.out.println("Enter value");
+            System.out.println(mess);
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
                 if (choice >= min && choice <= max) {

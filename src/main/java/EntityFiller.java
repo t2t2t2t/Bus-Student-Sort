@@ -27,12 +27,12 @@ public class EntityFiller {
             // Валидация значения
             if (validator != null && !((Validate<Object>) validator).isValid(parsedValue)) {
                 if (data != null) {
-                    System.out.println("Валидация не прошла: " + field.getName() + ". Пропуск...");
+                    System.out.println("Validation failed: " + field.getName() + ". pass ...");
                     continue; // Пропускаем значение при загрузке из файла
                 } else {
                     // Запрашиваем значение заново, если это ручной ввод
                     while (!((Validate<Object>) validator).isValid(parsedValue)) {
-                        System.out.println("Неправильное значение " + field.getName() + ". Попробуйте снова:");
+                        System.out.println("Invalid value " + field.getName() + ". Try again:");
                         value = getInput(field);
                         parsedValue = parseValue(field.getType(), value);
                     }
@@ -53,7 +53,9 @@ public class EntityFiller {
             case "email" -> new ValidationUtils.UserEmailValidator();
             case "model" -> new ValidationUtils.BusModelValidator();
             case "password" -> new ValidationUtils.UserPasswordValidator();
-            case "averagegrade" -> new ValidationUtils.AverageGradeValidator();
+            case "mileage" -> new ValidationUtils.MileageValidator();
+            case "recordbooknumber" -> new ValidationUtils.NumberValidator();
+            case "name" -> new ValidationUtils.UserNameValidator();
             default -> null;
         };
     }

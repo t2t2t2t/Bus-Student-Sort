@@ -7,7 +7,6 @@ public class SearchUtility {
 
         public static <T> int BinarySearch(List<T> list, T key, Comparator<T> comparator) {
 
-            list.sort(comparator);
 
         if (list.isEmpty() || key == null || comparator == null) {
             return -1;

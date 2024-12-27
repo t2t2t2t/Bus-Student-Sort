@@ -4,7 +4,6 @@ public class Student {
     private String groupNumber;
     private double averageScore;
     private String recordBookNumber;
-    private boolean sortable;
 
     public Student() {
     }
@@ -13,7 +12,7 @@ public class Student {
         this.groupNumber = builder.groupNumber;
         this.averageScore = builder.averageScore;
         this.recordBookNumber = builder.recordBookNumber;
-        this.sortable = builder.sortable;
+
     }
 
     public String getGroupNumber() {
@@ -58,10 +57,7 @@ public class Student {
             return this;
         }
 
-        public StudentBuilder setSortable(boolean sortable) {
-            this.sortable = sortable;
-            return this;
-        }
+
 
         public Student build() {
             return new Student(this);

@@ -4,7 +4,6 @@ public class User {
     private String name;
     private String password;
     private String email;
-    private boolean sortable;
 
 
     public User() {
@@ -14,7 +13,7 @@ public class User {
         this.name = builder.name;
         this.password = builder.password;
         this.email = builder.email;
-        this.sortable = builder.sortable;
+
     }
 
     public String getName() {
@@ -55,10 +54,7 @@ public class User {
             return this;
         }
 
-        public UserBuilder setSortable(boolean sortable) {
-            this.sortable = sortable;
-            return this;
-        }
+
 
         public User build() {
             return new User(this);

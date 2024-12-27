@@ -1,4 +1,5 @@
-C789FG,Mercedes,60000,true
-A123BC,Mercedes,50000,true
-B456DE,Volvo,30000,false
-
+789,Mercedes,60000
+123,Mercedes,50000
+123,√аз,50000
+123,√аза,50000
+456,Volvo,30000

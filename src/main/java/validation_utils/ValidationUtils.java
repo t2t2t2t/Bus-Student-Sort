@@ -3,11 +3,29 @@ package validation_utils;
 import java.util.regex.Pattern;
 
 public class ValidationUtils {
-    //Число не отрицательное: номер автобуса, пробег авт, номер группы студ, номер зачетки,
-    public static class NumberValidator implements Validate<Integer> {
+    //Число не отрицательное: номер автобуса, номер группы студ, номер зачетки
+    public static class NumberValidator implements Validate<String> {
         @Override
-        public boolean isValid(Integer number) {
-            return number != null && number > 0;
+        public boolean isValid (String number){
+            try
+            {return number != null && Integer.parseInt(number) > 0;
+            }
+            catch (NumberFormatException e){
+                return false;
+            }
+        }
+
+    }
+
+    public static class MileageValidator implements Validate<Integer> {
+        @Override
+        public boolean isValid(Integer mileage){
+            try{
+                return mileage != null && mileage > 0;
+            }
+            catch(NumberFormatException e){
+                return false;
+            }
         }
     }
     public static class BooleanValidator implements Validate<Boolean> {
@@ -46,7 +64,12 @@ public class ValidationUtils {
     public static class AverageGradeValidator implements Validate<Double> {
         @Override
         public boolean isValid(Double averageGrade) {
-            return averageGrade != null && averageGrade >= 2 && averageGrade <= 5;
+            try{
+                return averageGrade != null && averageGrade >= 2 && averageGrade <= 5;
+            }
+            catch (NumberFormatException e) {
+                return false;
+            }
         }
     }
 
@@ -55,8 +78,8 @@ public class ValidationUtils {
     public static class UserNameValidator implements Validate<String> {
         @Override
         public boolean isValid(String name) {
-            return name != null && name.length() >= 3 && name.matches("[a-zA-Zа-яА-Я]+");
-        }
+            return name != null && name.trim().length() >= 3 && name.matches("[a-zA-Z]+");}
+
     }
 
     // пароль пользователя минимум 4 символа
