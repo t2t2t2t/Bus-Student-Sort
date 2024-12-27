@@ -7,13 +7,11 @@ import java.util.List;
 class WriteInFile {
     private static final String FILE_PATH = "file.txt";
 
-    public void logSortedCollection(List<Sortable> sortedCollection) { // Измените на List<Sortable>
+    public void logSortedCollection(List sortedCollection) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
-            for (Sortable item : sortedCollection) { // Измените на Sortable
-                if (item.isSortable()) {
+            for (Object item : sortedCollection) {
                     writer.write(item.toString());
                     writer.newLine();
-                }
             }
             writer.write("\n\n");
         } catch (IOException e) {

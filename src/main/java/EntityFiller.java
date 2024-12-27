@@ -1,3 +1,6 @@
+import validation_utils.Validate;
+import validation_utils.ValidationUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -16,33 +19,67 @@ public class EntityFiller {
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             field.setAccessible(true);
+            Validate<?> validator = getValidator(field);
 
-            try {
-                String value = (data != null && i < data.length) ? data[i] : getInput(field);
-                switch (field.getType().getName()) {
-                    case "java.lang.String":
-                        field.set(entity, value);
-                        break;
+            String value = (data != null && i < data.length) ? data[i] : getInput(field);
+            Object parsedValue = parseValue(field.getType(), value);
 
-                    case "int":
-                        field.set(entity, Integer.parseInt(value));
-                        break;
-
-                    case "boolean":
-                        field.set(entity, Boolean.parseBoolean(value));
-                        break;
-
-                    case "double":
-                        field.set(entity, Double.parseDouble(value));
-                        break;
-
-                    default:
-                        throw new IllegalArgumentException("Unsupported field type: " + field.getType().getName());
+            // Валидация значения
+            if (validator != null && !((Validate<Object>) validator).isValid(parsedValue)) {
+                if (data != null) {
+                    System.out.println("Валидация не прошла: " + field.getName() + ". Пропуск...");
+                    continue; // Пропускаем значение при загрузке из файла
+                } else {
+                    // Запрашиваем значение заново, если это ручной ввод
+                    while (!((Validate<Object>) validator).isValid(parsedValue)) {
+                        System.out.println("Неправильное значение " + field.getName() + ". Попробуйте снова:");
+                        value = getInput(field);
+                        parsedValue = parseValue(field.getType(), value);
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
 
+            // Устанавливаем значение в поле
+            try {
+                field.set(entity, parsedValue);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static Validate<?> getValidator(Field field) {
+        return switch (field.getName().toLowerCase()) {
+            case "email" -> new ValidationUtils.UserEmailValidator();
+            case "model" -> new ValidationUtils.BusModelValidator();
+            case "password" -> new ValidationUtils.UserPasswordValidator();
+            case "averagegrade" -> new ValidationUtils.AverageGradeValidator();
+            default -> null;
+        };
+    }
+
+    private static Object parseValue(Class<?> type, String value) {
+        switch (type.getName()) {
+            case "java.lang.String":
+                return value;
+            case "int":
+                try {
+                    return Integer.parseInt(value);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid integer value: " + value + ". Assigning default value (0).");
+                    return 0;
+                }
+            case "double":
+                try {
+                    return Double.parseDouble(value);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid double value: " + value + ". Assigning default value (0.0).");
+                    return 0.0;
+                }
+            case "boolean":
+                return Boolean.parseBoolean(value);
+            default:
+                throw new IllegalArgumentException("Unsupported field type: " + type.getName());
         }
     }
 

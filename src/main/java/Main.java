@@ -69,90 +69,114 @@ public class Main {
 
 
     public static void actionMenu(Object[] entities) {
-        Object[] sortClass;
-        Object findObject;
+        List<Object> sortList = null;
+        Object findObject = null;
         WriteInFile writer = new WriteInFile();
-        // Пример записи
-        List<Sortable> sortableList = Arrays.stream(entities)
-                .filter(e -> e instanceof Sortable)
-                .map(e -> (Sortable) e)
-                .toList();
-
         List<Object> list = Arrays.asList(entities);
-       Comparator<?> comparator = ComparatorUtil.getComparator(ClassUtil.getClassFromList(list))
-                .selectComparator(1);
-        writer.logSortedCollection(sortableList);
 
         while (true) {
             System.out.println(MenuConstants.ACTION_MENU);
-            switch (getChoice(0, 5)) {
+            int choice = getChoice(0, 5);
+            switch (choice) {
                 case 1:
-                    System.out.println("Sort");
-
-                    var fields = Arrays.stream(entities[0].getClass().getDeclaredFields()).toList();
-
-
-                    for (int i = 0; i < fields.size(); i++) {
-                        System.out.println(i + ": " + fields.get(i).getName());
-                    }
-
-                    int fieldIndex = getChoice(0, fields.size() - 1);
-
-                    var selectedField = fields.get(fieldIndex);
-
-                    System.out.println("Selected field: " + selectedField.getName());
-
-                    comparator = ComparatorUtil.getComparator(ClassUtil.getClassFromList(list))
-                            .selectComparator(0);
-                    SorterUtil.sort(list, comparator, "quick");
-                    sortClass=list.toArray();
+                    sortList = sortEntities(list);
+                    System.out.println(sortList);
                     break;
                 case 2:
-                    System.out.println("Binary Search");
-                    Class<?> clazz = list.get(0).getClass();
-                    fields = Arrays.stream(entities[0].getClass().getDeclaredFields()).toList();
-
-
-                    for (int i = 0; i < fields.size(); i++) {
-                        System.out.println(i + ": " + fields.get(i).getName());
-                    }
-
-                    fieldIndex = getChoice(0, fields.size() - 1);
-
-                    selectedField = fields.get(fieldIndex);
-
-                    System.out.println("Selected field: " + selectedField.getName());
-
-                    Comparator<Object> comparator1 = (Comparator<Object>) SearchingCompareUtil.getComparatorForClass(clazz, fieldIndex);
-
-                    String str=scanner.nextLine();
-
-                    Object target = SearchingCompareUtil.CreateTargetObject(clazz, str,fieldIndex);  // Создаем правильный объект
-
-                    int studentResult = SearchUtility.BinarySearch(list, target, comparator1);
-
-                    findObject=list.get(studentResult);
-                    System.out.println(findObject);
+                    findObject = performBinarySearch(list);
                     break;
-
                 case 3:
-                    System.out.println("Writing to a file with sorting");
-                    System.out.println("The sorted data is recorded.");
+                    System.out.println(sortList);
+                    writeSortedCollectionToFile(writer, sortList);
                     break;
                 case 4:
-                    System.out.println("Writing to a file with binary search");
-                    writer.logFoundValue(entities[0]);
-                    System.out.println("The sorted data is recorded.");
+
+                    writeFoundValueToFile(writer, findObject);
                     break;
                 case 5:
-                    System.out.println("Data output");
-                    for (Object e: entities) {
-                        System.out.println(e.toString());
-                    }
+                    displayEntities(entities);
                     break;
                 case 0:
                     return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
             }
+        }
+    }
+
+    private static List<Object> sortEntities(List<Object> list) {
+        Comparator<?> comparator = ComparatorUtil.getComparator(ClassUtil.getClassFromList(list)).selectComparator(1);
+
+        System.out.println("Sort");
+        var fields = Arrays.stream(list.get(0).getClass().getDeclaredFields()).toList();
+
+        for (int i = 0; i < fields.size(); i++) {
+            System.out.println(i + ": " + fields.get(i).getName());
+        }
+
+        int fieldIndex = getChoice(0, fields.size() - 1);
+        var selectedField = fields.get(fieldIndex);
+        System.out.println("Selected field: " + selectedField.getName());
+
+        comparator = ComparatorUtil.getComparator(ClassUtil.getClassFromList(list)).selectComparator(0);
+        SorterUtil.sort(list, comparator, "quick");
+
+        // Проверка изменения sortList
+        System.out.println("Sorting completed. Sorted list: " + list);
+        return list; // Возвращаем отсортированный список
+    }
+
+    private static Object performBinarySearch(List<Object> list) {
+        System.out.println("Binary Search");
+        Class<?> clazz = list.get(0).getClass();
+        var fields = Arrays.stream(clazz.getDeclaredFields()).toList();
+
+        for (int i = 0; i < fields.size(); i++) {
+            System.out.println(i + ": " + fields.get(i).getName());
+        }
+
+        int fieldIndex = getChoice(0, fields.size() - 1);
+        var selectedField = fields.get(fieldIndex);
+        System.out.println("Selected field: " + selectedField.getName());
+
+        Comparator<Object> comparator = (Comparator<Object>) SearchingCompareUtil.getComparatorForClass(clazz, fieldIndex);
+        System.out.print("Enter search value: ");
+        String str = scanner.nextLine();
+        Object target = SearchingCompareUtil.CreateTargetObject(clazz, str, fieldIndex);
+
+        int resultIndex = SearchUtility.BinarySearch(list, target, comparator);
+        if (resultIndex >= 0) {
+            Object foundObject = list.get(resultIndex);
+            System.out.println("Found object: " + foundObject);
+            return foundObject;
+        } else {
+            System.out.println("Object not found.");
+            return null;
+        }
+    }
+
+    private static void writeSortedCollectionToFile(WriteInFile writer, List<Object> sortList) {
+        if (sortList != null && !sortList.isEmpty()) {
+            writer.logSortedCollection(sortList);
+            System.out.println("The sorted data is recorded.");
+        } else {
+            System.out.println("No sorted data to write.");
+        }
+    }
+
+    private static void writeFoundValueToFile(WriteInFile writer, Object findObject) {
+        if (findObject != null) {
+            writer.logFoundValue(findObject);
+            System.out.println("The found object is recorded.");
+        } else {
+            System.out.println("No object found to write.");
+        }
+    }
+
+    private static void displayEntities(Object[] entities) {
+        System.out.println("Data output:");
+        for (Object e : entities) {
+            System.out.println(e.toString());
         }
     }
 
