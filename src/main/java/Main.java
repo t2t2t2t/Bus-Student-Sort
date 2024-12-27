@@ -88,30 +88,51 @@ public class Main {
             switch (getChoice(0, 5)) {
                 case 1:
                     System.out.println("Sort");
-                    // Здесь добавляем логику сортировки
+
+                    var fields = Arrays.stream(entities[0].getClass().getDeclaredFields()).toList();
+
+
+                    for (int i = 0; i < fields.size(); i++) {
+                        System.out.println(i + ": " + fields.get(i).getName());
+                    }
+
+                    int fieldIndex = getChoice(0, fields.size() - 1);
+
+                    var selectedField = fields.get(fieldIndex);
+
+                    System.out.println("Selected field: " + selectedField.getName());
+
                     comparator = ComparatorUtil.getComparator(ClassUtil.getClassFromList(list))
-                            .selectComparator(1);
-                    SorterUtil.sort(list,comparator, "quick");
-                    System.out.println(list);
-                    System.out.println("Sorted data:");
-                    sortableList.forEach(System.out::println);
+                            .selectComparator(0);
+                    SorterUtil.sort(list, comparator, "quick");
+                    sortClass=list.toArray();
                     break;
                 case 2:
                     System.out.println("Binary Search");
+                    Class<?> clazz = list.get(0).getClass();
+                    fields = Arrays.stream(entities[0].getClass().getDeclaredFields()).toList();
 
-                    System.out.println("Write value to search");
 
-                    String value = scanner.nextLine();
+                    for (int i = 0; i < fields.size(); i++) {
+                        System.out.println(i + ": " + fields.get(i).getName());
+                    }
 
-                    System.out.println("Binary Search");
-                    Class<?> searchingClass = list.get(0).getClass();
-                    Comparator<Object> comparator1 = (Comparator<Object>) SearchingCompareUtil.getComparatorForClass(searchingClass, 0);
-                    Object target = SearchingCompareUtil.CreateTargetObject(searchingClass, value);  // Создаем правильный объект
+                    fieldIndex = getChoice(0, fields.size() - 1);
+
+                    selectedField = fields.get(fieldIndex);
+
+                    System.out.println("Selected field: " + selectedField.getName());
+
+                    Comparator<Object> comparator1 = (Comparator<Object>) SearchingCompareUtil.getComparatorForClass(clazz, fieldIndex);
+
+                    String str=scanner.nextLine();
+
+                    Object target = SearchingCompareUtil.CreateTargetObject(clazz, str,fieldIndex);  // Создаем правильный объект
 
                     int studentResult = SearchUtility.BinarySearch(list, target, comparator1);
 
-                    System.out.println(list.get(studentResult));
-
+                    findObject=list.get(studentResult);
+                    System.out.println(findObject);
                     break;
 
                 case 3:
